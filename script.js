@@ -88,6 +88,8 @@ const UI = {
 async function initLuminaHub() {
     const params = new URLSearchParams(window.location.search);
     GameState.roomId = params.get('room');
+    // initLuminaHub এর ভেতরে এটি যোগ করো
+    GameState.mySymbol = (GameState.playerRole === 'Host') ? 'X' : 'O';
 
     if (!GameState.roomId) {
         // নতুন ইউনিক রুম আইডি তৈরি (Host Mode)
@@ -192,10 +194,7 @@ function updateUrl() {
     window.history.pushState({ path: newUrl }, '', newUrl);
 }
 
-function showToast(msg, type) {
-    // এখানে তোমার ফ্লোরাল টোস্ট এনিমেশন লজিক থাকবে
-    console.log(`[Toast ${type}]: ${msg}`);
-}
+
 
 window.closeModals = () => document.getElementById('modal-overlay').classList.add('hidden-view');
 
@@ -1099,3 +1098,20 @@ initLudo();
    Lumina Games is now a fully functional, real-time multiplayer hub.
    Jubair, it's time to share the link with Nabila! 🚀🌸
    ================================================================================= */
+
+// HTML এর onclick থেকে কল করার জন্য ফাংশনগুলোকে গ্লোবাল উইন্ডোতে এক্সপোর্ট করা
+window.launchGame = launchGame;
+window.saveProfile = saveProfile;
+window.setAvatar = setAvatar;
+window.returnToHub = returnToHub;
+window.closeModals = closeModals;
+
+// রুম আইডি দিয়ে জয়েন করার লজিক
+window.joinRoomById = function() {
+    const id = document.getElementById('join-id-input').value;
+    if(id) {
+        window.location.search = `?room=${id}`;
+    } else {
+        showToast("Please enter a valid Room ID", "error");
+    }
+};
