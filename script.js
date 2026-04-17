@@ -245,254 +245,206 @@ initApp();
    Ready for Part 2: Real-time Messaging & Presence System.
    ================================================================================= */
 
-   /**
- * =================================================================================
- * THE ULTIMATE MULTI-GAME HUB - JAVASCRIPT LOGIC (PART 1 OF 5)
- * PROJECT: Nabila's Special Gaming Arena
- * DEVELOPER: Shaikh Jubair (CSE, UIU) & Gemini AI
- * DESCRIPTION: Core State Engine, Firebase Initialization, and Utility Framework.
- * =================================================================================
- */
-
-// --- 1. FIREBASE MODULE IMPORTS ---
-// আমরা রিয়েল-টাইম ডাটাবেস মডিউলগুলো ইমপোর্ট করছি যা ঢাকা ও রাজশাহীর মধ্যে ডাটা সিঙ্ক করবে।
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { 
-    getDatabase, 
-    ref, 
-    onValue, 
-    set, 
-    update, 
-    push, 
-    onChildAdded, 
-    onDisconnect,
-    remove 
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-// --- 2. FIREBASE CONFIGURATION ---
-// তোমার প্রোভাইড করা আসল কনফিগারেশন এখানে সেট করা হলো।
-const firebaseConfig = {
-  apiKey: "AIzaSyALbo1Qxqg0zAHjiBUdfK7ngOJAj-IKoA8",
-  authDomain: "tic-tac-toe-8418d.firebaseapp.com",
-  projectId: "tic-tac-toe-8418d",
-  storageBucket: "tic-tac-toe-8418d.firebasestorage.app",
-  messagingSenderId: "1005166545721",
-  appId: "1:1005166545721:web:a2a44406d0d83f50c176e8",
-  measurementId: "G-MB387QCSYN"
-};
-
-// অ্যাপ এবং ডাটাবেস অবজেক্ট ইনিশিয়ালাইজ করা
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// --- 3. GLOBAL GAME STATE OBJECT ---
-// এই বিশাল অবজেক্টটি গেমের কঙ্কাল হিসেবে কাজ করবে। এটিই ১৫০০ লাইনের লজিকের মূল ভিত্তি।
-const GameState = {
-    roomId: null,
-    playerRole: null, // 'host' (Player 1) অথবা 'guest' (Player 2/3/4)
-    mySymbol: null,   // X/O, Red/Green/Blue/Yellow
-    currentActiveView: 'dashboard',
-    
-    // গেমের ইন্টারনাল ডাটা স্ট্রাকচার
-    ticTacToe: {
-        board: Array(9).fill(null),
-        turn: 'X',
-        scores: { X: 0, O: 0 },
-        isGameOver: false,
-        winner: null,
-        winningLine: null
-    },
-    
-    snakeLadders: {
-        positions: { p1: 1, p2: 1 },
-        turn: 'p1',
-        isRolling: false,
-        lastRoll: 0,
-        // সাপ এবং মই এর পজিশন ম্যাপিং (CSE লজিক: Key = Start, Value = End)
-        snakes: { 17: 7, 54: 34, 62: 19, 98: 79, 87: 24, 93: 73 },
-        ladders: { 3: 38, 4: 14, 9: 31, 21: 42, 28: 84, 51: 67, 71: 91, 80: 100 }
-    },
-    
-    ludo: {
-        positions: {
-            red: [0, 0, 0, 0],    // 0 মানে বেসে আছে
-            green: [0, 0, 0, 0],
-            yellow: [0, 0, 0, 0],
-            blue: [0, 0, 0, 0]
-        },
-        turn: 'red',
-        diceValue: null,
-        isDiceRolled: false,
-        homeBase: { red: 0, green: 0, yellow: 0, blue: 0 } // কয়টা গুটি ঘরে পৌঁছাল
-    },
-    
-    chat: {
-        messages: [],
-        unreadCount: 0
-    }
-};
-
-// --- 4. DOM ELEMENT CACHE ---
-// পারফরম্যান্স ভালো রাখার জন্য আমরা সব HTML আইডি আগে থেকেই ক্যাশ করে নিচ্ছি।
-const UI = {
-    mainStage: document.getElementById('main-stage'),
-    sidebar: document.getElementById('main-sidebar'),
-    chatWindow: document.getElementById('chat-window'),
-    chatMessages: document.getElementById('chat-messages'),
-    roomDisplay: document.getElementById('current-room-id'),
-    statusText: document.getElementById('db-connection-text'),
-    
-    // Views
-    views: {
-        dashboard: document.getElementById('view-dashboard'),
-        tictactoe: document.getElementById('view-tictactoe'),
-        snake: document.getElementById('view-snake'),
-        ludo: document.getElementById('view-ludo')
-    },
-    
-    // Tic Tac Toe
-    tttCells: document.querySelectorAll('.grid-cell'),
-    tttAnnouncer: document.getElementById('ttt-announcer-text'),
-    tttTurnBadge: document.getElementById('ttt-turn-badge'),
-    
-    // Snake & Ladders
-    snakeCells: document.querySelectorAll('.b-cell'),
-    diceCube: document.getElementById('dice'),
-    snakeLog: document.getElementById('snake-log')
-};
-
-// --- 5. INITIALIZATION & ROOM LOGIC ---
 /**
- * জুবায়ের, এখানে আমরা URL চেক করছি। 
- * যদি 'room' প্যারামিটার না থাকে, তবে তুমি হোস্ট। আর থাকলে তুমি গেস্ট।
+ * =================================================================================
+ * THE ULTIMATE MULTI-GAME HUB - JAVASCRIPT LOGIC (PART 2 OF 5)
+ * FOCUS: Real-time Communication, Chat Engine & Global Synchronization
+ * =================================================================================
  */
-function initApp() {
-    const params = new URLSearchParams(window.location.search);
-    GameState.roomId = params.get('room');
 
-    if (!GameState.roomId) {
-        // নতুন ইউনিক রুম আইডি তৈরি (Host Mode)
-        GameState.roomId = "ROOM-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-        GameState.playerRole = 'host';
-        GameState.mySymbol = 'X'; // হোস্ট সবসময় X বা Red হবে
-        
-        // URL আপডেট করা (পেজ রিফ্রেশ না করে)
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?room=' + GameState.roomId;
-        window.history.pushState({ path: newUrl }, '', newUrl);
-        
-        // ডাটাবেসে রুম তৈরি করা
-        createNewRoomInDB();
-    } else {
-        // গেস্ট মোড
-        GameState.playerRole = 'guest';
-        GameState.mySymbol = 'O'; // গেস্ট O বা অন্য কালার হবে
-        checkRoomAvailability();
-    }
-
-    // UI আপডেট
-    UI.roomDisplay.innerText = GameState.roomId;
-    setupRealtimeListeners();
-}
-
-// --- 6. DATABASE SYNC FUNCTIONS ---
-// ডাটাবেসে নতুন গেম রুম তৈরি করার ফাংশন
-function createNewRoomInDB() {
+// --- 9. REAL-TIME DATA OBSERVERS ---
+/**
+ * এই ফাংশনটি ডাটাবেসের ওপর সারাক্ষণ নজর রাখবে। 
+ * যখনই ডাটাবেসে কোনো চেঞ্জ হবে, এটি সাথে সাথে UI আপডেট করবে।
+ */
+function setupRealtimeListeners() {
     const roomRef = ref(db, 'rooms/' + GameState.roomId);
-    set(roomRef, {
-        meta: {
-            createdAt: Date.now(),
-            status: 'waiting',
-            hostPresent: true,
-            guestPresent: false
-        },
-        gameState: {
-            activeGame: 'dashboard',
-            ticTacToe: GameState.ticTacToe,
-            snakeLadders: GameState.snakeLadders,
-            ludo: GameState.ludo
+
+    // পুরো রুমের ডাটা অবজার্ভ করা
+    onValue(roomRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        // A. মেটা ডাটা এবং প্লেয়ার প্রেজেন্স আপডেট
+        handlePresenceUpdate(data.meta);
+
+        // B. গেম ভিউ সিঙ্ক্রোনাইজেশন
+        // যদি হোস্ট গেম চেঞ্জ করে, তবে গেস্টের স্ক্রিনও চেঞ্জ হবে
+        if (data.gameState.activeGame !== GameState.currentActiveView) {
+            syncGameView(data.gameState.activeGame);
         }
+
+        // C. গেম স্পেসিফিক ডাটা আপডেট (পরবর্তী পার্টে বিস্তারিত আসবে)
+        GameState.ticTacToe = data.gameState.ticTacToe;
+        GameState.snakeLadders = data.gameState.snakeLadders;
+        GameState.ludo = data.gameState.ludo;
     });
 
-    // হোস্ট ট্যাব বন্ধ করলে ডাটাবেস থেকে রুম মুছে ফেলার লজিক (অন ডিসকানেক্ট)
-    onDisconnect(roomRef).remove();
+    // চ্যাট মেসেজের জন্য আলাদা লিসেনার (নতুন মেসেজ আসলে ট্রিগার হবে)
+    setupChatListener();
 }
 
-// রুম আছে কি না চেক করা
-function checkRoomAvailability() {
-    const roomRef = ref(db, 'rooms/' + GameState.roomId);
-    onValue(roomRef, (snapshot) => {
-        if (!snapshot.exists()) {
-            alert("This room no longer exists. Creating a new one...");
-            window.location.href = window.location.pathname;
-        } else {
-            // গেস্ট জয়েন করেছে এটা হোস্টকে জানানো
-            update(ref(db, `rooms/${GameState.roomId}/meta`), {
-                guestPresent: true
-            });
+// --- 10. PRESENCE LOGIC ---
+/**
+ * ঢাকা থেকে তুমি যখন খেলবে, রাজশাহী থেকে নাবিলা জয়েন করলেই 
+ * "Waiting" লেখাটা বদলে গিয়ে "Connected" হয়ে যাবে।
+ */
+function handlePresenceUpdate(meta) {
+    if (meta.guestPresent) {
+        UI.statusText.innerText = "Partner Connected";
+        UI.statusText.style.color = "var(--neon-green)";
+        
+        // টিক-ট্যাক-টো অ্যানাউন্সার আপডেট
+        if (UI.tttAnnouncer) {
+            UI.tttAnnouncer.innerText = "Partner has joined! Ready to play.";
         }
-    }, { onlyOnce: true });
+    } else {
+        UI.statusText.innerText = "Waiting for partner...";
+        UI.statusText.style.color = "var(--neon-gold)";
+    }
 }
 
-// --- 7. NAVIGATION SYSTEM ---
-// এক স্ক্রিন থেকে অন্য স্ক্রিনে স্মুথলি যাওয়ার লজিক
-window.launchGame = function(gameType) {
-    if (!viewsExist(gameType)) return;
-
-    // সব ভিউ হাইড করো
+function syncGameView(gameType) {
+    // শুধুমাত্র ভিউ চেঞ্জ করা, লুপ এড়ানোর জন্য ডাটাবেসে আবার আপডেট পাঠাবো না
     Object.keys(UI.views).forEach(key => {
         UI.views[key].classList.add('hidden-view');
         UI.views[key].classList.remove('active-view');
     });
-
-    // টার্গেট ভিউ দেখাও
     UI.views[gameType].classList.remove('hidden-view');
     UI.views[gameType].classList.add('active-view');
     GameState.currentActiveView = gameType;
-
-    // ডাটাবেসে আপডেট করো যাতে অন্য প্লেয়ারের স্ক্রিনও অটোমেটিক চেঞ্জ হয়
-    update(ref(db, `rooms/${GameState.roomId}/gameState`), {
-        activeGame: gameType
-    });
-};
-
-function viewsExist(type) {
-    return UI.views.hasOwnProperty(type);
 }
 
-window.returnToHub = function() {
-    window.launchGame('dashboard');
-};
+// --- 11. ADVANCED CHAT SYSTEM LOGIC ---
+/**
+ * গেম খেলার সময় তোমরা যেন মেসেজ আদান-প্রদান করতে পারো।
+ * এটি Firebase এর push() মেথড ব্যবহার করে মেসেজ লিস্ট তৈরি করে।
+ */
+const ChatManager = {
+    // মেসেজ পাঠানো
+    send: function(text) {
+        if (!text.trim()) return;
 
-// --- 8. UTILITY SUITE ---
-// গেম ডেভেলপমেন্টের জন্য কিছু হেল্পার ফাংশন
-const Utils = {
-    // র‍্যান্ডম ডাইস রোল (১ থেকে ৬)
-    getRandomDice: () => Math.floor(Math.random() * 6) + 1,
-    
-    // গ্রিড কোঅর্ডিনেট ক্যালকুলেটর (লুডুর জন্য লাগবে)
-    getGridXY: (index) => {
-        return {
-            x: index % 10,
-            y: Math.floor(index / 10)
+        const chatRef = ref(db, `rooms/${GameState.roomId}/chat`);
+        const newMessage = {
+            sender: GameState.playerRole,
+            symbol: GameState.mySymbol,
+            text: this.sanitize(text),
+            timestamp: Date.now()
         };
+
+        push(chatRef, newMessage);
+        document.getElementById('chat-input-field').value = '';
     },
-    
-    // সাউন্ড এফেক্ট প্লেয়ার (ফিউচার ফিচারের জন্য)
-    playSound: (type) => {
-        console.log(`Playing sound: ${type}`);
-        // Audio logic will go here
+
+    // XSS অ্যাটাক থেকে বাঁচার জন্য ইনপুট স্যানিটাইজ করা (CSE Standard)
+    sanitize: function(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    },
+
+    // মেসেজ UI-তে দেখানো
+    display: function(msgData) {
+        const msgDiv = document.createElement('div');
+        const isMe = msgData.sender === GameState.playerRole;
+        
+        msgDiv.className = `message ${isMe ? 'user-msg' : 'partner-msg'}`;
+        msgDiv.innerHTML = `
+            <span class="msg-sender">${isMe ? 'You' : 'Partner'}</span>
+            <span class="msg-content">${msgData.text}</span>
+            <span class="msg-time">${new Date(msgData.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+        `;
+        
+        UI.chatMessages.appendChild(msgDiv);
+        
+        // অটো স্ক্রল টু বটম
+        UI.chatMessages.scrollTop = UI.chatMessages.scrollHeight;
+
+        // যদি চ্যাট উইন্ডো বন্ধ থাকে, তবে ব্যাজ আপডেট করো
+        if (UI.chatWindow.classList.contains('collapsed')) {
+            GameState.chat.unreadCount++;
+            this.updateBadge();
+        }
+    },
+
+    updateBadge: function() {
+        const badge = document.getElementById('chat-badge');
+        badge.innerText = GameState.chat.unreadCount;
+        badge.style.display = GameState.chat.unreadCount > 0 ? 'flex' : 'none';
     }
 };
 
-// অ্যাপ চালু করা
-initApp();
+// চ্যাট লিসেনার সেটআপ
+function setupChatListener() {
+    const chatRef = ref(db, `rooms/${GameState.roomId}/chat`);
+    onChildAdded(chatRef, (snapshot) => {
+        const msgData = snapshot.val();
+        ChatManager.display(msgData);
+    });
+}
+
+// --- 12. UI EVENT BINDINGS (CHAT & CONTROLS) ---
+document.getElementById('toggle-chat').addEventListener('click', () => {
+    UI.chatWindow.classList.toggle('collapsed');
+    GameState.chat.unreadCount = 0;
+    ChatManager.updateBadge();
+});
+
+document.getElementById('close-chat').addEventListener('click', () => {
+    UI.chatWindow.classList.add('collapsed');
+});
+
+// মেসেজ পাঠানোর জন্য ফর্ম সাবমিট হ্যান্ডলার
+document.getElementById('chat-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = document.getElementById('chat-input-field');
+    ChatManager.send(input.value);
+});
+
+// কুইক ইমোজি সাপোর্ট
+document.querySelectorAll('.emoji-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        ChatManager.send(btn.innerText);
+    });
+});
+
+// --- 13. SETTINGS & PREFERENCES HANDLER ---
+/**
+ * ডার্ক মোড এবং থিম কন্ট্রোল লজিক।
+ */
+const ThemeManager = {
+    toggle: function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('game-theme', newTheme);
+    },
+    
+    loadSaved: function() {
+        const saved = localStorage.getItem('game-theme');
+        if (saved) document.documentElement.setAttribute('data-theme', saved);
+    }
+};
+
+document.querySelector('.theme-toggle').addEventListener('click', ThemeManager.toggle);
+ThemeManager.loadSaved();
+
+// লোডিং স্ক্রিন সরিয়ে ফেলা (সব লজিক লোড হওয়ার পর)
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.body.classList.remove('preload');
+        console.log("Game Arena Ready!");
+    }, 1000);
+});
 
 /* =================================================================================
-   PART 1 COMPLETE: The foundation is set.
-   Ready for Part 2: Real-time Messaging & Presence System.
+   PART 2 COMPLETE: The bridge is live. 
+   Now you and your partner can chat and sync screens in real-time.
+   Ready for Part 3: The Tic-Tac-Toe Pro Logic & Winning Algorithms.
    ================================================================================= */
 
-   /**
+/**
  * =================================================================================
  * THE ULTIMATE MULTI-GAME HUB - JAVASCRIPT LOGIC (PART 3 OF 5)
  * FOCUS: Tic-Tac-Toe Pro Engine, Win/Draw Algorithms & Live State Sync
@@ -850,7 +802,7 @@ function updateSnakeUI() {
    Final Part 5: Classic Ludo Mastery - Multi-Token movement and Home Base logic.
    ================================================================================= */
 
-   /**
+/**
  * =================================================================================
  * THE ULTIMATE MULTI-GAME HUB - JAVASCRIPT LOGIC (PART 5 OF 5)
  * FOCUS: Classic Ludo Mastery, Token Selection & Global Game Controller
