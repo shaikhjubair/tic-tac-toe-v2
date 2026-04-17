@@ -772,5 +772,31 @@
     
     <script type="module" src="script.js"></script>
 
+    <div id="modal-overlay" class="modal-overlay hidden-view">
+    
+    <div class="custom-modal" id="profile-modal">
+        <h3>Edit Your Profile</h3>
+        <div class="avatar-selector">
+            <span class="emoji-opt" onclick="setAvatar('👤')">👤</span>
+            <span class="emoji-opt" onclick="setAvatar('🦁')">🦁</span>
+            <span class="emoji-opt" onclick="setAvatar('🌸')">🌸</span>
+            <span class="emoji-opt" onclick="setAvatar('⚡')">⚡</span>
+            <span class="emoji-opt" onclick="setAvatar('🔥')">🔥</span>
+        </div>
+        <input type="text" id="edit-name-input" placeholder="Enter your name..." maxlength="15">
+        <button class="launch-btn btn-primary" onclick="saveProfile()">Save Changes</button>
+    </div>
+
+    <div class="custom-modal hidden-view" id="join-room-modal">
+        <h3>Join a Battle</h3>
+        <p>Enter the Room ID shared by your partner:</p>
+        <input type="text" id="join-id-input" placeholder="Example: ROOM-XYZ12">
+        <button class="launch-btn btn-primary" onclick="joinRoomById()">Join Arena</button>
+        <button class="launch-btn btn-secondary" onclick="closeModals()">Cancel</button>
+    </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
 </body>
 </html>
