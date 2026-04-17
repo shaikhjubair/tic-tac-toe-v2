@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="A real-time multiplayer gaming hub created with love and logic.">
+    <meta name="theme-color" content="#121212">
+    <title>The Ultimate Gaming Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --bg-main: #0f1115;
+            --text-primary: #f0f2f5;
+            --accent-glow: rgba(0, 230, 118, 0.4);
+            --floral-fill: #1ed760;
+        }
+        body { margin: 0; background: var(--bg-main); color: var(--text-primary); overflow-x: hidden; }
+        .preload * { transition: none !important; }
+    </style>
+</head>
+<body class="preload">
+
+    <div class="background-decorations" aria-hidden="true">
+        <svg class="bg-svg top-left-art" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00e676;stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:#00b0ff;stop-opacity:0.05" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="15" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+            <path fill="url(#grad1)" filter="url(#glow)" d="M125.5,-163.7C162.3,-146.4,191.6,-110.8,212.1,-69.1C232.6,-27.4,244.3,20.4,233.1,64.2C221.9,108,187.8,147.8,144.1,173.3C100.4,198.8,47.1,210,-5.8,217.7C-58.7,225.4,-117.4,229.6,-159.2,204.6C-201,179.6,-225.9,125.4,-235.4,70.9C-244.9,16.4,-239,-38.4,-214.3,-84.1C-189.6,-129.8,-146.1,-166.4,-100.9,-182.2C-55.7,-198,-9.8,-193,34.7,-181.7C79.2,-170.4,121,-154,125.5,-163.7Z" transform="translate(150 150) scale(1.2)" />
+            <path fill="#ffffff" opacity="0.05" d="M45.7,-76.3C58.9,-69.3,69,-55.4,77.4,-41.2C85.8,-27,92.5,-12.5,91.8,1.7C91.1,15.9,83,29.8,74.1,42.7C65.2,55.6,55.5,67.5,42.8,75.1C30.1,82.7,14.4,86,-1.3,87.8C-17,89.6,-34,89.9,-48.3,83.1C-62.6,76.3,-74.2,62.4,-82.2,47.4C-90.2,32.4,-94.6,16.2,-94.2,0.2C-93.8,-15.8,-88.6,-31.6,-80,-45.3C-71.4,-59,-59.4,-70.6,-45.3,-77.2C-31.2,-83.8,-15.6,-85.4,0.7,-86.6C17,-87.8,34.1,-88.6,45.7,-76.3Z" transform="translate(150 150)" />
+            <path fill="#00e676" opacity="0.1" d="M38.1,-63.5C51.6,-56.4,66.2,-48.5,74.3,-36.4C82.4,-24.3,84.1,-7.9,81.4,7.6C78.7,23.1,71.6,37.8,61.5,49.8C51.4,61.8,38.3,71.1,24.1,75.6C9.9,80.1,-5.4,79.8,-19.7,75.5C-34,71.2,-47.3,62.9,-58.5,51.8C-69.7,40.7,-78.8,26.8,-82.5,11.5C-86.2,-3.8,-84.5,-20.5,-76.6,-33.9C-68.7,-47.3,-54.6,-57.4,-40.5,-64.1C-26.4,-70.8,-13.2,-74.1,0.2,-74.4C13.6,-74.7,27.2,-72.1,38.1,-63.5Z" transform="translate(150 150)" />
+        </svg>
+
+        <svg class="bg-svg bottom-right-art" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad2" x1="100%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" style="stop-color:#448aff;stop-opacity:0.2" />
+                    <stop offset="100%" style="stop-color:#ff5252;stop-opacity:0.05" />
+                </linearGradient>
+            </defs>
+            <path fill="url(#grad2)" filter="url(#glow)" d="M115.4,-148.6C153.1,-121.7,189.4,-91.3,208.6,-51.7C227.8,-12.1,229.9,36.7,208.8,75.6C187.7,114.5,143.4,143.5,99.1,165.6C54.8,187.7,10.5,202.9,-33.5,199.5C-77.5,196.1,-121.2,174.1,-155.8,142.1C-190.4,110.1,-215.9,68.1,-222.9,23.5C-229.9,-21.1,-218.4,-68.3,-189.5,-103.5C-160.6,-138.7,-114.3,-161.9,-71.4,-174.3C-28.5,-186.7,11.1,-188.3,49.2,-177.3C87.3,-166.3,123.9,-142.7,115.4,-148.6Z" transform="translate(350 350) scale(1.3)" />
+            <path fill="#ffffff" opacity="0.03" d="M51.8,-74.9C65.5,-65.4,74.1,-49.4,80.1,-32.8C86.1,-16.2,89.5,1.1,85.6,16.8C81.7,32.5,70.5,46.6,56.9,56.7C43.3,66.8,27.3,72.9,10.6,76.5C-6.1,80.1,-23.5,81.2,-38.7,75.2C-53.9,69.2,-66.9,56.1,-75.4,41.2C-83.9,26.3,-87.9,9.6,-85.7,-6.2C-83.5,-22,-75.1,-36.9,-63.9,-48.5C-52.7,-60.1,-38.7,-68.4,-23.9,-73.6C-9.1,-78.8,6.5,-80.9,22.1,-79.1C37.7,-77.3,53.3,-71.6,51.8,-74.9Z" transform="translate(350 350)" />
+        </svg>
+
+        <div class="particles-container">
+            <div class="particle p1"></div>
+            <div class="particle p2"></div>
+            <div class="particle p3"></div>
+            <div class="particle p4"></div>
+            <div class="particle p5"></div>
+            <div class="particle p6"></div>
+            <div class="particle p7"></div>
+            <div class="particle p8"></div>
+        </div>
+    </div>
+
+    <div id="app-root" class="app-layout">
+        
+        <aside class="left-sidebar" id="main-sidebar">
+            
+            <div class="brand-header">
+                <div class="brand-icon-wrapper">
+                    <svg class="brand-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1 class="brand-title">Lumina Games</h1>
+                    <span class="brand-subtitle">Play, Connect, Inspire</span>
+                </div>
+            </div>
+
+            <div class="inspiration-container">
+                <div class="quote-card primary-quote">
+                    <span class="quote-mark open">❝</span>
+                    <p class="quote-body">
+                        The true beauty of a game isn't found in winning or losing. It is found in the moments shared, the laughter echoing across the distance, and the connection built one move at a time. Play from the heart.
+                    </p>
+                    <span class="quote-mark close">❞</span>
+                    <div class="quote-footer">
+                        <div class="quote-line"></div>
+                        <span class="quote-author">Made with care</span>
+                    </div>
+                </div>
+
+                <div class="quote-card secondary-quote">
+                    <p class="quote-body italic-text">
+                        "Patience shapes the path in Ludo, strategy wins Tic-Tac-Toe, but joy is present in every roll of the dice."
+                    </p>
+                </div>
+            </div>
+
+            <div class="server-status-panel">
+                <h3 class="panel-heading">Connection Status</h3>
+                
+                <div class="status-row">
+                    <div class="status-indicator online">
+                        <span class="pulse-ring"></span>
+                        <span class="pulse-core"></span>
+                    </div>
+                    <span class="status-text" id="db-connection-text">Server Online</span>
+                </div>
+
+                <div class="room-details-box">
+                    <span class="room-label">Current Room ID</span>
+                    <div class="room-id-display">
+                        <span id="current-room-id">Generating...</span>
+                        <button class="copy-btn" id="copy-room-btn" title="Copy Invite Link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="room-hint">Share this link to invite your partner.</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active" data-target="dashboard">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Game Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-target="leaderboard">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🏆</span>
+                            <span class="nav-text">Leaderboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-target="settings">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">Preferences</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="user-profile-mini">
+                <div class="avatar-circle" id="my-avatar">X</div>
+                <div class="user-details">
+                    <span class="user-name" id="my-name-display">Player X</span>
+                    <span class="user-role" id="my-role-display">Host</span>
+                </div>
+            </div>
+
+        </aside>
+
+        <div class="chat-overlay-system" id="global-chat">
+            <div class="chat-toggle-btn" id="toggle-chat" aria-label="Open Chat">
+                <span class="chat-icon">💬</span>
+                <span class="unread-badge" id="chat-badge">0</span>
+            </div>
+            
+            <div class="chat-window collapsed" id="chat-window">
+                <div class="chat-header">
+                    <h4>Live Messages</h4>
+                    <button class="close-chat-btn" id="close-chat">×</button>
+                </div>
+                
+                <div class="chat-messages-area" id="chat-messages">
+                    <div class="message system-msg">
+                        <span class="msg-content">Welcome to the game room! Messages are end-to-end synced.</span>
+                    </div>
+                    </div>
+                
+                <div class="chat-input-area">
+                    <div class="quick-emojis">
+                        <button class="emoji-btn">❤️</button>
+                        <button class="emoji-btn">😎</button>
+                        <button class="emoji-btn">😭</button>
+                        <button class="emoji-btn">🎉</button>
+                        <button class="emoji-btn">🎲</button>
+                    </div>
+                    <form class="chat-form" id="chat-form" onsubmit="event.preventDefault();">
+                        <input type="text" class="chat-input" id="chat-input-field" placeholder="Type a message..." autocomplete="off">
+                        <button type="submit" class="chat-send-btn" aria-label="Send Message">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-stage" id="main-stage">
+            
+            <header class="stage-header">
+                <div class="header-greeting">
+                    <h2 class="greeting-title">Welcome to the Arena</h2>
+                    <p class="greeting-sub">Choose your battlefield. May the best mind win.</p>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="icon-btn sound-toggle" aria-label="Toggle Sound">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </button>
+                    <button class="icon-btn theme-toggle" aria-label="Toggle Theme">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="elegant-divider">
+                <span class="divider-line"></span>
+                <span class="divider-diamond">♦</span>
+                <span class="divider-line"></span>
+            </div>
+
+            <section class="view-section active-view" id="view-dashboard">
+                
+                <div class="game-selection-grid">
+                    
+                    <article class="game-card premium-card" data-game="tictactoe">
+                        <div class="card-glow-effect"></div>
+                        <div class="card-content">
+                            <div class="card-icon-wrapper neon-blue">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Tic-Tac-Toe</h3>
+                            <p class="card-desc">The ultimate duel of X and O. Quick, intense, and pure strategy.</p>
+                            
+                            <div class="card-stats">
+                                <span class="stat-badge">2 Players</span>
+                                <span class="stat-badge">Fast Pace</span>
+                            </div>
+                            
+                            <button class="launch-btn btn-primary" onclick="launchGame('tictactoe')">
+                                Enter Arena <span class="arrow">→</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="game-card premium-card" data-game="snake">
+                        <div class="card-glow-effect"></div>
+                        <div class="card-content">
+                            <div class="card-icon-wrapper neon-green">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Snake & Ladders</h3>
+                            <p class="card-desc">A journey of luck and surprises. Climb high, but watch your step!</p>
+                            
+                            <div class="card-stats">
+                                <span class="stat-badge">2-4 Players</span>
+                                <span class="stat-badge">Fun & Chill</span>
+                            </div>
+                            
+                            <button class="launch-btn btn-secondary" onclick="launchGame('snake')">
+                                Start Journey <span class="arrow">→</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <article class="game-card premium-card" data-game="ludo">
+                        <div class="card-glow-effect"></div>
+                        <div class="card-content">
+                            <div class="card-icon-wrapper neon-gold">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                                    <circle cx="15.5" cy="8.5" r="1.5" fill="currentColor"></circle>
+                                    <circle cx="15.5" cy="15.5" r="1.5" fill="currentColor"></circle>
+                                    <circle cx="8.5" cy="15.5" r="1.5" fill="currentColor"></circle>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Classic Ludo</h3>
+                            <p class="card-desc">The king of board games. Master your moves and conquer the center.</p>
+                            
+                            <div class="card-stats">
+                                <span class="stat-badge">2-4 Players</span>
+                                <span class="stat-badge">Strategic</span>
+                            </div>
+                            
+                            <button class="launch-btn btn-secondary" onclick="launchGame('ludo')">
+                                Roll Dice <span class="arrow">→</span>
+                            </button>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <section class="view-section hidden-view" id="view-tictactoe">
+                
+                <div class="arena-header">
+                    <button class="back-to-hub-btn" onclick="returnToHub()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Hub
+                    </button>
+                    <h2 class="arena-title">Tic-Tac-Toe Duel</h2>
+                    <div class="turn-indicator-badge" id="ttt-turn-badge">X's Turn</div>
+                </div>
+
+                <div class="versus-scoreboard">
+                    <div class="player-profile left-player active-turn" id="profile-x">
+                        <div class="avatar-ring glowing-ring-blue">
+                            <div class="player-avatar">X</div>
+                        </div>
+                        <div class="player-info">
+                            <h4 class="player-name">Player X</h4>
+                            <span class="player-status">You</span>
+                        </div>
+                        <div class="score-box">
+                            <span class="score-label">Wins</span>
+                            <span class="score-number" id="score-val-x">0</span>
+                        </div>
+                    </div>
+
+                    <div class="vs-divider">
+                        <div class="spark-line"></div>
+                        <span class="vs-text">VS</span>
+                        <div class="spark-line"></div>
+                    </div>
+
+                    <div class="player-profile right-player" id="profile-o">
+                        <div class="score-box">
+                            <span class="score-label">Wins</span>
+                            <span class="score-number" id="score-val-o">0</span>
+                        </div>
+                        <div class="player-info text-right">
+                            <h4 class="player-name">Player O</h4>
+                            <span class="player-status waiting">Waiting...</span>
+                        </div>
+                        <div class="avatar-ring glowing-ring-red">
+                            <div class="player-avatar">O</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="live-match-announcer">
+                    <p id="ttt-announcer-text">Waiting for opponent to join...</p>
+                </div>
+
+                <div class="board-wrapper">
+                    <div class="glowing-backdrop"></div>
+                    <div class="tictactoe-master-grid" id="ttt-board">
+                        
+                        <div class="grid-cell top-left" data-index="0">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell top-mid" data-index="1">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell top-right" data-index="2">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+
+                        <div class="grid-cell mid-left" data-index="3">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell mid-mid" data-index="4">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell mid-right" data-index="5">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+
+                        <div class="grid-cell bot-left" data-index="6">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell bot-mid" data-index="7">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        <div class="grid-cell bot-right" data-index="8">
+                            <span class="cell-content"></span>
+                            <div class="cell-hover-glow"></div>
+                        </div>
+                        
+                        <svg class="winning-line-svg" id="winning-line" viewBox="0 0 300 300" preserveAspectRatio="none">
+                            <line id="win-line-path" x1="0" y1="0" x2="0" y2="0" stroke-width="8" stroke="url(#win-glow)" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="win-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#00e676" />
+                                    <stop offset="100%" stop-color="#00b0ff" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="arena-controls">
+                    <button class="control-btn outline-btn" id="ttt-rematch-btn" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <polyline points="23 20 23 14 17 14"></polyline>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                        </svg>
+                        Request Rematch
+                    </button>
+                    <button class="control-btn fill-btn" id="ttt-clear-score-btn">
+                        Reset Scores
+                    </button>
+                </div>
+                
+            </section>
+        
+
+এই অংশে ড্যাশবোর্ড এবং টিক-ট্যাক-টো গেমের একদম ডিটেইলড লেআউট তৈরি করা হয়েছে। এখানে গ্লোয়িং রিং, উইনিং লাইন দেখানোর জন্য আলাদা SVG ক্যানভাস এবং প্লেয়ারদের স্কোরবোর্ড অ্যাড করা হয়েছে, যা তোমার ওয়েবসাইটকে খুব প্রফেশনাল একটা লুক দেবে।
+
+এটি কপি করা হয়ে গেলে আমাকে জানাও, আমি **Part 3** (সাপ-লুডুর ডিটেইলড লেআউট) দিয়ে দিচ্ছি!
+
+            <section class="view-section hidden-view" id="view-snake">
+                
+                <div class="arena-header snake-header">
+                    <button class="back-to-hub-btn" onclick="returnToHub()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Hub
+                    </button>
+                    <h2 class="arena-title">Snake & Ladders</h2>
+                    <div class="turn-indicator-badge neon-green-badge" id="snake-turn-badge">Player 1's Turn</div>
+                </div>
+
+                <div class="match-dashboard">
+                    <div class="player-card active-card" id="snake-p1-card">
+                        <div class="avatar-ring glowing-ring-green">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4" alt="P1" class="avatar-img">
+                        </div>
+                        <div class="card-info">
+                            <h4>Player 1</h4>
+                            <span class="position-badge">Pos: <strong id="p1-pos">1</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="dice-station">
+                        <div class="dice-wrapper" id="dice-container">
+                            <div class="dice-cube" id="dice">
+                                <div class="dice-face front"><span class="dot middle"></span></div>
+                                <div class="dice-face back"><span class="dot top-left"></span><span class="dot bottom-right"></span></div>
+                                <div class="dice-face right"><span class="dot top-left"></span><span class="dot middle"></span><span class="dot bottom-right"></span></div>
+                                <div class="dice-face left"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+                                <div class="dice-face top"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot middle"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+                                <div class="dice-face bottom"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot mid-left"></span><span class="dot mid-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+                            </div>
+                        </div>
+                        <button class="roll-btn fill-btn neon-green-btn" id="snake-roll-btn">ROLL DICE</button>
+                        <p class="dice-log" id="snake-log">Ready to play!</p>
+                    </div>
+
+                    <div class="player-card" id="snake-p2-card">
+                        <div class="card-info text-right">
+                            <h4>Player 2</h4>
+                            <span class="position-badge">Pos: <strong id="p2-pos">1</strong></span>
+                        </div>
+                        <div class="avatar-ring glowing-ring-orange">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka&backgroundColor=ffdfbf" alt="P2" class="avatar-img">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-wrapper snake-board-wrapper">
+                    <svg class="board-overlay-svg" id="snake-ladders-overlay" viewBox="0 0 1000 1000">
+                        </svg>
+
+                    <div class="snake-grid-board" id="snake-board">
+                        <div class="b-cell" data-num="100"><span class="cell-num">100</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="99"><span class="cell-num">99</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="98"><span class="cell-num">98</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="97"><span class="cell-num">97</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="96"><span class="cell-num">96</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="95"><span class="cell-num">95</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="94"><span class="cell-num">94</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="93"><span class="cell-num">93</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="92"><span class="cell-num">92</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="91"><span class="cell-num">91</span><div class="token-zone"></div></div>
+                        
+                        <div class="b-cell alt-bg" data-num="81"><span class="cell-num">81</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="82"><span class="cell-num">82</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="83"><span class="cell-num">83</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="84"><span class="cell-num">84</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="85"><span class="cell-num">85</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="86"><span class="cell-num">86</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="87"><span class="cell-num">87</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="88"><span class="cell-num">88</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="89"><span class="cell-num">89</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="90"><span class="cell-num">90</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell" data-num="80"><span class="cell-num">80</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="79"><span class="cell-num">79</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="78"><span class="cell-num">78</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="77"><span class="cell-num">77</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="76"><span class="cell-num">76</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="75"><span class="cell-num">75</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="74"><span class="cell-num">74</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="73"><span class="cell-num">73</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="72"><span class="cell-num">72</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="71"><span class="cell-num">71</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell alt-bg" data-num="61"><span class="cell-num">61</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="62"><span class="cell-num">62</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="63"><span class="cell-num">63</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="64"><span class="cell-num">64</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="65"><span class="cell-num">65</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="66"><span class="cell-num">66</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="67"><span class="cell-num">67</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="68"><span class="cell-num">68</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="69"><span class="cell-num">69</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="70"><span class="cell-num">70</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell" data-num="60"><span class="cell-num">60</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="59"><span class="cell-num">59</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="58"><span class="cell-num">58</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="57"><span class="cell-num">57</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="56"><span class="cell-num">56</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="55"><span class="cell-num">55</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="54"><span class="cell-num">54</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="53"><span class="cell-num">53</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="52"><span class="cell-num">52</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="51"><span class="cell-num">51</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell alt-bg" data-num="41"><span class="cell-num">41</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="42"><span class="cell-num">42</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="43"><span class="cell-num">43</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="44"><span class="cell-num">44</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="45"><span class="cell-num">45</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="46"><span class="cell-num">46</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="47"><span class="cell-num">47</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="48"><span class="cell-num">48</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="49"><span class="cell-num">49</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="50"><span class="cell-num">50</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell" data-num="40"><span class="cell-num">40</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="39"><span class="cell-num">39</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="38"><span class="cell-num">38</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="37"><span class="cell-num">37</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="36"><span class="cell-num">36</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="35"><span class="cell-num">35</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="34"><span class="cell-num">34</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="33"><span class="cell-num">33</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="32"><span class="cell-num">32</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="31"><span class="cell-num">31</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell alt-bg" data-num="21"><span class="cell-num">21</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="22"><span class="cell-num">22</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="23"><span class="cell-num">23</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="24"><span class="cell-num">24</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="25"><span class="cell-num">25</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="26"><span class="cell-num">26</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="27"><span class="cell-num">27</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="28"><span class="cell-num">28</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="29"><span class="cell-num">29</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="30"><span class="cell-num">30</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell" data-num="20"><span class="cell-num">20</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="19"><span class="cell-num">19</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="18"><span class="cell-num">18</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="17"><span class="cell-num">17</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="16"><span class="cell-num">16</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="15"><span class="cell-num">15</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="14"><span class="cell-num">14</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="13"><span class="cell-num">13</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="12"><span class="cell-num">12</span><div class="token-zone"></div></div>
+                        <div class="b-cell" data-num="11"><span class="cell-num">11</span><div class="token-zone"></div></div>
+
+                        <div class="b-cell alt-bg" data-num="1"><span class="cell-num">1</span><div class="token-zone" id="start-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="2"><span class="cell-num">2</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="3"><span class="cell-num">3</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="4"><span class="cell-num">4</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="5"><span class="cell-num">5</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="6"><span class="cell-num">6</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="7"><span class="cell-num">7</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="8"><span class="cell-num">8</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="9"><span class="cell-num">9</span><div class="token-zone"></div></div>
+                        <div class="b-cell alt-bg" data-num="10"><span class="cell-num">10</span><div class="token-zone"></div></div>
+                    </div>
+                </div>
+
+            </section>
+        
+
+এখানে প্রতিটি ঘরে `token-zone` নামে একটি ডিভ রাখা হয়েছে, যেখানে গুটিগুলো বসবে এবং অ্যানিমেশনের মাধ্যমে এক ঘর থেকে অন্য ঘরে মুভ করবে। পাশাপাশি থ্রিডি ডাইসের সব সাইড (front, back, left, right) তৈরি করা হয়েছে, যাতে ঘোরানোর সময় এটা একদম সত্যিকারের ছক্কার মতো দেখায়।
+
+এটি বসানো হয়ে গেলে আমাকে বলো, আমি **Part 4** (ক্লাসিক লুডুর জটিল বোর্ড এবং বাকি ফিনিশিং ট্যাগ) দিয়ে HTML কোডের কাজ সম্পন্ন করব!
+            <section class="view-section hidden-view" id="view-ludo">
+                
+                <div class="arena-header ludo-header">
+                    <button class="back-to-hub-btn" onclick="returnToHub()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Hub
+                    </button>
+                    <h2 class="arena-title">Classic Ludo Mastery</h2>
+                    <div class="turn-indicator-badge neon-gold-badge" id="ludo-turn-badge">Red's Turn</div>
+                </div>
+
+                <div class="ludo-master-wrapper">
+                    
+                    <div class="ludo-side-panel left-panel">
+                        <div class="ludo-player-card red-player active-player" id="ludo-p1-card">
+                            <div class="player-avatar-box">
+                                <div class="avatar-ring red-ring">R</div>
+                            </div>
+                            <div class="player-details">
+                                <h4 class="player-name">Player 1</h4>
+                                <span class="captured-count">Captured: <strong id="red-cap">0</strong></span>
+                            </div>
+                            <div class="ludo-dice-box" id="red-dice-box">
+                                <button class="ludo-roll-btn red-btn">Roll 🎲</button>
+                            </div>
+                        </div>
+
+                        <div class="ludo-player-card yellow-player" id="ludo-p4-card">
+                            <div class="player-avatar-box">
+                                <div class="avatar-ring yellow-ring">Y</div>
+                            </div>
+                            <div class="player-details">
+                                <h4 class="player-name">Player 4</h4>
+                                <span class="captured-count">Captured: <strong id="yellow-cap">0</strong></span>
+                            </div>
+                            <div class="ludo-dice-box" id="yellow-dice-box">
+                                <button class="ludo-roll-btn yellow-btn" disabled>Wait</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ludo-board-container">
+                        <div class="ludo-board-grid" id="ludo-board">
+                            
+                            <div class="ludo-base red-base top-left-base">
+                                <div class="base-inner">
+                                    <div class="token-spot" id="red-token-1"><div class="ludo-token red-token"></div></div>
+                                    <div class="token-spot" id="red-token-2"><div class="ludo-token red-token"></div></div>
+                                    <div class="token-spot" id="red-token-3"><div class="ludo-token red-token"></div></div>
+                                    <div class="token-spot" id="red-token-4"><div class="ludo-token red-token"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="ludo-base green-base top-right-base">
+                                <div class="base-inner">
+                                    <div class="token-spot" id="green-token-1"><div class="ludo-token green-token"></div></div>
+                                    <div class="token-spot" id="green-token-2"><div class="ludo-token green-token"></div></div>
+                                    <div class="token-spot" id="green-token-3"><div class="ludo-token green-token"></div></div>
+                                    <div class="token-spot" id="green-token-4"><div class="ludo-token green-token"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="ludo-base yellow-base bottom-left-base">
+                                <div class="base-inner">
+                                    <div class="token-spot" id="yellow-token-1"><div class="ludo-token yellow-token"></div></div>
+                                    <div class="token-spot" id="yellow-token-2"><div class="ludo-token yellow-token"></div></div>
+                                    <div class="token-spot" id="yellow-token-3"><div class="ludo-token yellow-token"></div></div>
+                                    <div class="token-spot" id="yellow-token-4"><div class="ludo-token yellow-token"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="ludo-base blue-base bottom-right-base">
+                                <div class="base-inner">
+                                    <div class="token-spot" id="blue-token-1"><div class="ludo-token blue-token"></div></div>
+                                    <div class="token-spot" id="blue-token-2"><div class="ludo-token blue-token"></div></div>
+                                    <div class="token-spot" id="blue-token-3"><div class="ludo-token blue-token"></div></div>
+                                    <div class="token-spot" id="blue-token-4"><div class="ludo-token blue-token"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="ludo-center-home">
+                                <div class="home-triangle red-home-triangle"></div>
+                                <div class="home-triangle green-home-triangle"></div>
+                                <div class="home-triangle yellow-home-triangle"></div>
+                                <div class="home-triangle blue-home-triangle"></div>
+                                <div class="center-glow"></div>
+                            </div>
+
+                            <div class="ludo-path top-path">
+                                <div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch green-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell safe-star">★</div><div class="p-cell safe-stretch green-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch green-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch green-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch green-stretch"></div><div class="p-cell normal-cell"></div>
+                            </div>
+
+                            <div class="ludo-path bottom-path">
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch yellow-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch yellow-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch yellow-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch yellow-stretch"></div><div class="p-cell safe-star">★</div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch yellow-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div>
+                            </div>
+
+                            <div class="ludo-path left-path">
+                                <div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-stretch red-stretch"></div><div class="p-cell safe-stretch red-stretch"></div><div class="p-cell safe-stretch red-stretch"></div><div class="p-cell safe-stretch red-stretch"></div><div class="p-cell safe-stretch red-stretch"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell safe-star">★</div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div>
+                            </div>
+
+                            <div class="ludo-path right-path">
+                                <div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell safe-star">★</div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell safe-stretch blue-stretch"></div><div class="p-cell safe-stretch blue-stretch"></div><div class="p-cell safe-stretch blue-stretch"></div><div class="p-cell safe-stretch blue-stretch"></div><div class="p-cell safe-stretch blue-stretch"></div><div class="p-cell normal-cell"></div>
+                                <div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div><div class="p-cell normal-cell"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="ludo-side-panel right-panel">
+                        <div class="ludo-player-card green-player" id="ludo-p2-card">
+                            <div class="player-avatar-box">
+                                <div class="avatar-ring green-ring">G</div>
+                            </div>
+                            <div class="player-details">
+                                <h4 class="player-name">Player 2</h4>
+                                <span class="captured-count">Captured: <strong id="green-cap">0</strong></span>
+                            </div>
+                            <div class="ludo-dice-box" id="green-dice-box">
+                                <button class="ludo-roll-btn green-btn" disabled>Wait</button>
+                            </div>
+                        </div>
+
+                        <div class="ludo-player-card blue-player" id="ludo-p3-card">
+                            <div class="player-avatar-box">
+                                <div class="avatar-ring blue-ring">B</div>
+                            </div>
+                            <div class="player-details">
+                                <h4 class="player-name">Player 3</h4>
+                                <span class="captured-count">Captured: <strong id="blue-cap">0</strong></span>
+                            </div>
+                            <div class="ludo-dice-box" id="blue-dice-box">
+                                <button class="ludo-roll-btn blue-btn" disabled>Wait</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            </main>
+    </div> <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>
