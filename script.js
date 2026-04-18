@@ -26,7 +26,8 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyALbo1Qxqg0zAHjiBUdfK7ngOJAj-IKoA8",
   authDomain: "tic-tac-toe-8418d.firebaseapp.com",
-  databaseURL: "https://tic-tac-toe-8418d-default-rtdb.firebaseio.com",
+// script.js এ এই ইউআরএলটি আপডেট করো
+  databaseURL: "https://tic-tac-toe-8418d-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "tic-tac-toe-8418d",
   storageBucket: "tic-tac-toe-8418d.firebasestorage.app",
   messagingSenderId: "1005166545721",
@@ -1114,4 +1115,13 @@ window.joinRoomById = function() {
     } else {
         showToast("Please enter a valid Room ID", "error");
     }
+};
+
+// এই লাইনগুলো script.js এর একদম শেষে থাকতে হবে
+window.launchGame = launchGame;
+window.saveProfile = saveProfile;
+window.setAvatar = setAvatar;
+window.returnToHub = returnToHub;
+window.closeModals = () => {
+    document.getElementById('modal-overlay').classList.add('hidden-view');
 };

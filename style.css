@@ -1543,3 +1543,19 @@ body {
     }
 }
 
+/* সাইডবারের নীল লিঙ্ক এবং লেআউট ফিক্স */
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar-nav .nav-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* নিচের বাড়তি এলিমেন্টগুলো হাইড করা */
+.app-layout > *:not(aside):not(main):not(.chat-overlay-system) {
+    display: none;
+}
