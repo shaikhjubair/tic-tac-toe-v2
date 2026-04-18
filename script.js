@@ -27,7 +27,9 @@ const firebaseConfig = {
   apiKey: "AIzaSyALbo1Qxqg0zAHjiBUdfK7ngOJAj-IKoA8",
   authDomain: "tic-tac-toe-8418d.firebaseapp.com",
 // script.js এ এই ইউআরএলটি আপডেট করো
-  databaseURL: "https://tic-tac-toe-8418d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  // script.js এ এই ইউআরএলটি হুবহু কপি করে বসাও
+// script.js এ এই ইউআরএলটি হুবহু কপি করে বসাও
+databaseURL: "https://tic-tac-toe-8418d-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "tic-tac-toe-8418d",
   storageBucket: "tic-tac-toe-8418d.firebasestorage.app",
   messagingSenderId: "1005166545721",
