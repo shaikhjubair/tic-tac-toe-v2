@@ -41,77 +41,65 @@ const db = getDatabase(app);
 
 // --- 3. GLOBAL GAME STATE (THE HEART OF THE HUB) ---
 // এই বিশাল অবজেক্টটি গেমের কঙ্কাল হিসেবে কাজ করবে। এটিই ১৫০০ লাইনের লজিকের মূল ভিত্তি।
+// --- 3. GLOBAL GAME STATE (THE HEART OF THE HUB) ---
 const GameState = {
-    roomId: null,
+    roomId: new URLSearchParams(window.location.search).get('room'),
     myPlayerId: localStorage.getItem('jubair_hub_user_id') || "USER-" + Math.random().toString(36).substring(2, 7).toUpperCase(),
-    playerRole: null, // 'Host' (Player 1) অথবা 'Guest' (Others)
+    playerRole: null, 
+    mySymbol: null, // এটি হোস্টের জন্য X এবং গেস্টের জন্য O হবে
     
-    // প্রোফাইল ডাটা যা রিয়েল-টাইমে সিঙ্ক হবে
     profile: {
         name: localStorage.getItem('jubair_hub_user_name') || "Player-" + Math.floor(Math.random() * 1000),
         avatar: localStorage.getItem('jubair_hub_user_avatar') || "👤",
         isReady: false
     },
 
-    activeGame: 'dashboard', // বর্তমান ভিউ (Tic-Tac-Toe, Ludo, etc.)
-    players: {}, // রুমে থাকা সব প্লেয়ারের লাইভ ডাটা
+    activeGame: 'dashboard',
+    players: {}, 
     
-    // গেমিং ডাটা স্ট্রাকচার
     ttt: { board: Array(9).fill(null), turn: 'X', scores: { X: 0, O: 0 }, isGameOver: false },
-    snake: { positions: { p1: 1, p2: 1, p3: 1 }, turn: 'p1', lastRoll: 0 },
+    snake: { positions: { p1: 1, p2: 1 }, turn: 'p1', lastRoll: 0 },
     ludo: { tokens: { red: [0,0,0,0], blue: [0,0,0,0] }, turn: 'red' }
 };
 
-// লোকাল স্টোরেজে আইডি সেভ রাখা
 localStorage.setItem('jubair_hub_user_id', GameState.myPlayerId);
 
-// --- 4. DOM ELEMENT CACHE (PERFORMANCE OPTIMIZATION) ---
-const UI = {
-    roomDisplay: document.getElementById('current-room-id'),
-    statusText: document.getElementById('db-connection-text'),
-    nameDisplay: document.getElementById('my-name-display'),
-    avatarDisplay: document.getElementById('my-avatar'),
-    mainStage: document.getElementById('main-stage'),
-    chatMessages: document.getElementById('chat-messages'),
-    
-    // Views
-    views: {
-        dashboard: document.getElementById('view-dashboard'),
-        tictactoe: document.getElementById('view-tictactoe'),
-        snake: document.getElementById('view-snake'),
-        ludo: document.getElementById('view-ludo')
-    }
-};
-
 // --- 5. INITIALIZATION & DYNAMIC ROOM LOGIC ---
-/**
- * জুবায়ের, এখানে আমরা URL চেক করছি। 
- * যদি 'room' প্যারামিটার না থাকে, তবে তুমি হোস্ট। আর থাকলে তুমি গেস্ট।
- */
 async function initLuminaHub() {
     const params = new URLSearchParams(window.location.search);
-    GameState.roomId = params.get('room');
-    // initLuminaHub এর ভেতরে এটি যোগ করো
-    GameState.mySymbol = (GameState.playerRole === 'Host') ? 'X' : 'O';
+    const idFromUrl = params.get('room');
 
-    if (!GameState.roomId) {
-        // নতুন ইউনিক রুম আইডি তৈরি (Host Mode)
+    // চেক করা হচ্ছে তুমি কি এই রুমের মালিক (Host)?
+    const isActuallyHost = idFromUrl ? localStorage.getItem(`host_of_${idFromUrl}`) === 'true' : true;
+
+    if (!idFromUrl) {
+        // ১. তুমি যখন প্রথমবার ওপেন করছো (Host Mode)
         GameState.roomId = "LUMINA-" + Math.random().toString(36).substring(2, 8).toUpperCase();
         GameState.playerRole = 'Host';
+        GameState.mySymbol = 'X';
+        localStorage.setItem(`host_of_${GameState.roomId}`, 'true'); 
         updateUrl();
         await createRoomInDatabase();
     } else {
-        // গেস্ট মোড - রুমে জয়েন করা
-        GameState.playerRole = 'Guest';
-        await joinRoomInDatabase();
+        // ২. লিঙ্কের মাধ্যমে জয়েন করা বা হোস্টের রিফ্রেশ করা
+        GameState.roomId = idFromUrl;
+        
+        if (isActuallyHost) {
+            GameState.playerRole = 'Host';
+            GameState.mySymbol = 'X';
+        } else {
+            GameState.playerRole = 'Guest';
+            GameState.mySymbol = 'O';
+            await joinRoomInDatabase();
+        }
     }
 
-    // UI প্রাথমিক আপডেট
-    UI.roomDisplay.innerText = GameState.roomId;
-    UI.nameDisplay.innerText = GameState.profile.name;
-    UI.avatarDisplay.innerText = GameState.profile.avatar;
+    // UI এলিমেন্ট আপডেট
+    if (UI.roomDisplay) UI.roomDisplay.innerText = GameState.roomId;
+    if (UI.nameDisplay) UI.nameDisplay.innerText = GameState.profile.name;
+    if (UI.avatarDisplay) UI.avatarDisplay.innerText = GameState.profile.avatar;
 
-    // লিসেনার শুরু করা (The Bridge)
+    // ডাটাবেস লিসেনার চালু করা
     listenToRoomUpdates();
 }
 

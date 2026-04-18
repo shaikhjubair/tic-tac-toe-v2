@@ -1617,3 +1617,42 @@ body {
         width: 100% !important;
     }
 }
+
+/* ==========================================
+   ULTIMATE MOBILE RESPONSIVE FIX
+   ========================================== */
+@media (max-width: 768px) {
+    body, html {
+        overflow-x: hidden; /* সাইড স্ক্রল বন্ধ করবে */
+        width: 100%;
+    }
+    .app-layout {
+        flex-direction: column !important;
+        width: 100vw !important;
+        padding: 5px !important;
+        overflow-x: hidden;
+    }
+    .left-sidebar, .main-stage {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100vw !important;
+        height: auto !important;
+        margin: 0 !important;
+        position: relative !important;
+    }
+    /* ড্যাশবোর্ড কার্ডগুলোর সাইজ এডজাস্ট */
+    .game-selection-grid {
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        gap: 15px !important;
+    }
+    .premium-card {
+        min-height: auto !important;
+        padding: 20px !important;
+    }
+    /* টিক-ট্যাক-টো বোর্ডের ওভারল্যাপ কমানো */
+    .view-section {
+        width: 100% !important;
+        padding-top: 20px;
+    }
+}
